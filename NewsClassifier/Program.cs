@@ -3,29 +3,51 @@ using System;
 
 namespace NewsClassifier
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("News classifier");
             Console.WriteLine();
 
             string[] headlines = new[]
             {
-                "Stocks move lower on discouraging news from space",
-                "Respawn: Patch to increase game resolution likely",
-                "'Some movie' sequel is in the works",
-                "Measles Outbreak In Some County"
+                "C9 fails to win the tournament again",
+                "Tesla car drives over old lady, yet again.",
+                "Dogecoin loses stonks",
+                "Biden revokes Trump orders targeting TikTok and WeChat and issues fresh order"
             };
 
             foreach (var headline in headlines)
             {
-                var classification = ConsumeModel.Predict(headline);
-
-                Console.WriteLine($"{classification}: {headline}");
+                ModelInput input = new ModelInput { Title = headline };
+                var classification = ConsumeModel.Predict(input);
+                var category = GetCategoryName(classification);
+                Console.WriteLine($"{category}: {headline}");
             }
 
             Console.WriteLine();
+        }
+
+        private static string GetCategoryName(ModelOutput classification)
+        {
+            switch (classification.Category)
+            {
+                case "b":
+                    return "Business";
+
+                case "t":
+                    return "Technology";
+
+                case "e":
+                    return "Entertainment";
+
+                case "m":
+                    return "Medicine";
+
+                default:
+                    return "Unknown";
+            }
         }
     }
 }
